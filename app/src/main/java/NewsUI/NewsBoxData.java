@@ -5,20 +5,23 @@ public class NewsBoxData {
     String Description;
     String[] coverImgURL;
     String publisher;
+    String detailUrl = "https://blog.csdn.net/YHyanghaoaixin/article/details/84772510?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-4.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-4.essearch_pc_relevant";
     boolean hasImg;
 
-    public NewsBoxData(String t, String d, String[] c, String p) {
+    public NewsBoxData(String t, String d, String[] c, String p, String _detailUrl) {
         title = t;
         Description = d;
         coverImgURL = c;
         publisher = p;
+        detailUrl = _detailUrl;
         hasImg = true;
     }
 
-    public NewsBoxData(String t, String d, String p) {
+    public NewsBoxData(String t, String d, String p, String _detailUrl) {
         title = t;
         Description = d;
         publisher = p;
+        detailUrl = _detailUrl;
         hasImg = false;
     }
     public String getTitle() {
@@ -55,5 +58,9 @@ public class NewsBoxData {
 
     public boolean hasImg() {
         return hasImg;
+    }
+
+    public String getDetailUrl() {
+        return detailUrl;
     }
 }

@@ -13,11 +13,11 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class MyAdapter extends ArrayAdapter<NewsBoxData> {
+public class NewsBoxAdapter extends ArrayAdapter<NewsBoxData> {
     private Context mContext;
     private int mResource;
 
-    public MyAdapter(@NonNull Context context, int resource, @NonNull List<NewsBoxData> objects) {
+    public NewsBoxAdapter(@NonNull Context context, int resource, @NonNull List<NewsBoxData> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;

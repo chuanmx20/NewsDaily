@@ -16,14 +16,16 @@
                 android:layout_height="50dp" android:id="@+id/searchBar" android:hint="Search for something"
                 android:textColorHint="#009688" app:magnifierIcon="@drawable/ic_fangdajing"
                 app:clearIcon="@drawable/ic_qingchu"/>
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:layout_height="match_parent"
-                                                               android:layout_width="match_parent"
-                                                               android:id="@+id/swipeRefreshLayout">
-            <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" android:id="@+id/newsList">
-            </ListView>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/news_tab_layout"
+                app:tabMode="scrollable"/>
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/news_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
