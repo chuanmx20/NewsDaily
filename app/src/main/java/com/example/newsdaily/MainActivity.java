@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
+    //娱乐、军事、教育、文化、健康、财经、体育、汽车、科技、社会
+    String[] categoriesList = {"娱乐", "军事", "教育", "文化", "健康", "财经", "体育", "汽车", "科技", "社会"};
     Handler mainHandler = new Handler();
     SwipeRefreshLayout swipeRefreshLayout;
     String curPageJson = "";

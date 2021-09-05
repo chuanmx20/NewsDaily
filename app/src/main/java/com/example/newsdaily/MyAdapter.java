@@ -16,15 +16,7 @@ import java.util.List;
 public class MyAdapter extends ArrayAdapter<NewsBoxData> {
     private Context mContext;
     private int mResource;
-    /**
-     * Constructor. This constructor will result in the underlying data collection being
-     * immutable, so methods such as {@link #clear()} will throw an exception.
-     *
-     * @param context  The current context.
-     * @param resource The resource ID for a layout file containing a TextView to use when
-     *                 instantiating views.
-     * @param objects  The objects to represent in the ListView.
-     */
+
     public MyAdapter(@NonNull Context context, int resource, @NonNull List<NewsBoxData> objects) {
         super(context, resource, objects);
         this.mContext = context;
