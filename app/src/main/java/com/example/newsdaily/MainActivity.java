@@ -58,9 +58,10 @@ public class MainActivity extends AppCompatActivity {
         //初始化碎片实例
         for (String category : categoriesList) {
             NewsFragment newsFragment = new NewsFragment(category);
-            newsFragment.refreshData();
             newsFragments.add(newsFragment);
         }
+
+        newsFragments.get(0).refreshData();
 
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
 
@@ -87,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class FragmentAdapter extends FragmentPagerAdapter {
+        NewsFragment curFragment = null;
 
+        public NewsFragment getCurFragment() {
+            return curFragment;
+        }
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -107,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return categoriesList[position];
+        }
+
+        @Override
+        public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            curFragment = (NewsFragment) object;
+            curFragment.refreshData();
+            super.setPrimaryItem(container, position, object);
         }
     }
 }

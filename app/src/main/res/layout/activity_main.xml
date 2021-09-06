@@ -17,11 +17,22 @@
                 android:textColorHint="#009688" app:magnifierIcon="@drawable/ic_fangdajing"
                 app:clearIcon="@drawable/ic_qingchu"/>
 
-        <com.google.android.material.tabs.TabLayout
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/news_tab_layout"
-                app:tabMode="scrollable"/>
+                android:layout_height="30dp">
+            <com.google.android.material.tabs.TabLayout
+                    android:layout_width="380dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/news_tab_layout"
+                    app:tabMode="scrollable"/>
+            <Button
+                    android:text="Button"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/ic_jiahao"
+                    android:color="#131212"
+                    android:layout_height="match_parent" android:id="@+id/button2" android:layout_weight="1"/>
+        </LinearLayout>
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/news_view_pager"
                 android:layout_width="match_parent"

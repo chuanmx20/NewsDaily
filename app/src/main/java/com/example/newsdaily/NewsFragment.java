@@ -2,6 +2,7 @@ package com.example.newsdaily;
 
 import NewsUI.NewsBoxData;
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NewsFragment extends Fragment {
-    Handler mainHandler;
+    Handler mainHandler = new Handler();
     SwipeRefreshLayout swipeRefreshLayout;
     ListView newsList;
     List<NewsBoxData> newsBoxDataArray;
@@ -45,6 +46,14 @@ public class NewsFragment extends Fragment {
     String keyWords = "拜登";
     String categories = "科技";
 
+    public void setCurPageJson(String _curPageJson) {
+        curPageJson = _curPageJson;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
     public void setKeyWords(String keyWords) {
         this.keyWords = keyWords;
     }
@@ -59,7 +68,6 @@ public class NewsFragment extends Fragment {
 
     @Nullable
     @Override
-
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
@@ -108,7 +116,6 @@ public class NewsFragment extends Fragment {
 
     private void setListData() {
         if (curPageData == null) {
-            System.out.println("Null data");
             return;
         }
         if (!newsBoxDataArray.isEmpty())
@@ -139,8 +146,6 @@ public class NewsFragment extends Fragment {
         updateEndTime();
         UrlCat();
         new fetchData(url).start();
-        refreshJson();
-        setListData();
     }
 
     class fetchData extends Thread {
@@ -163,11 +168,19 @@ public class NewsFragment extends Fragment {
                     data += line;
                 }
 
-                curPageJson = data;
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    curPageJson = data;
+                    refreshJson();
+                    setListData();
+                    System.out.println(curPageJson);
+                }
+            });
         }
+
     }
 }

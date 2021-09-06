@@ -1,5 +1,6 @@
 package com.example.newsdaily;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -9,16 +10,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String url = getIntent().getStringExtra("url");
-        System.out.println(url);
         WebView webView = findViewById(R.id.news_web);
-        webView.setWebViewClient(new WebViewClient());
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) { view.loadUrl(url); return super.shouldOverrideUrlLoading(view, url); } });
+
+
     }
 
     @Override
