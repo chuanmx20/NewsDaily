@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tagBar;
     ViewPager viewPager;
     String keyWords = "科技";
+    NewsFragment curFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
             NewsFragment newsFragment = new NewsFragment(category);
             newsFragments.add(newsFragment);
         }
-
-        newsFragments.get(0).refreshData();
 
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
 
@@ -79,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                     for (NewsFragment newsFragment : newsFragments) {
                         newsFragment.setKeyWords(keyWords);
                     }
-                    viewPager.getAdapter().notifyDataSetChanged();
+                    if (curFragment != null)
+                        curFragment.refreshData();
                     searchBar.clearFocus();
                 }
                 return false;
@@ -87,12 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private class FragmentAdapter extends FragmentPagerAdapter {
-        NewsFragment curFragment = null;
-
-        public NewsFragment getCurFragment() {
-            return curFragment;
-        }
+    class FragmentAdapter extends FragmentPagerAdapter {
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -117,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             curFragment = (NewsFragment) object;
-            curFragment.refreshData();
             super.setPrimaryItem(container, position, object);
         }
     }

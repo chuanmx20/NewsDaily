@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 import com.google.gson.Gson;
 import jsonBean.DataItem;
 import jsonBean.Response;
@@ -41,7 +42,7 @@ public class NewsFragment extends Fragment {
     String url = "https://api2.newsminer.net/svc/news/queryNewsList?size=15&startDate=2021-09-01&endDate=2021-09-03&words=拜登&categories=科技";
     String api = "https://api2.newsminer.net/svc/news/queryNewsList?";
     String size = "15";
-    String startDate = "2021-08-20";
+    String startDate = "2020-08-20";
     String endDate = "2021-09-03";
     String keyWords = "拜登";
     String categories = "科技";
@@ -92,16 +93,19 @@ public class NewsFragment extends Fragment {
             }
 
         });
-
+        refreshData();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshData();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshData();
     }
 
     private void UrlCat() {
@@ -177,10 +181,11 @@ public class NewsFragment extends Fragment {
                     curPageJson = data;
                     refreshJson();
                     setListData();
-                    System.out.println(curPageJson);
+
                 }
             });
         }
 
     }
 }
+
