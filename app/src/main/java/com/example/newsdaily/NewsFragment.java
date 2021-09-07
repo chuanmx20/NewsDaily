@@ -42,7 +42,7 @@ public class NewsFragment extends Fragment {
     String url = "https://api2.newsminer.net/svc/news/queryNewsList?size=15&startDate=2021-09-01&endDate=2021-09-03&words=拜登&categories=科技";
     String api = "https://api2.newsminer.net/svc/news/queryNewsList?";
     String size = "15";
-    String startDate = "2020-08-20";
+    String startDate = "2000-08-20";
     String endDate = "2021-09-03";
     String keyWords = "拜登";
     String categories = "科技";
@@ -63,9 +63,15 @@ public class NewsFragment extends Fragment {
         this.categories = categories;
     }
 
+    public String getCategories() {
+        return categories;
+    }
+
     public NewsFragment(String category) {
         categories = category;
     }
+
+    public NewsFragment() {}
 
     @Nullable
     @Override
@@ -93,10 +99,12 @@ public class NewsFragment extends Fragment {
             }
 
         });
-        refreshData();
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                refreshData();
+                System.out.println("Refreshing fragment of " + categories);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -104,8 +112,8 @@ public class NewsFragment extends Fragment {
 
     @Override
     public void onStart() {
-        super.onStart();
         refreshData();
+        super.onStart();
     }
 
     private void UrlCat() {
@@ -127,9 +135,9 @@ public class NewsFragment extends Fragment {
         for (DataItem data : curPageData.getData()) {
 
             if (data.getImageUrls() != null)
-                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getImageUrls(), data.getPublisher(), data.getUrl()));
+                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getImageUrls(), data.getPublisher(), data.getUrl(), data.getPublishTime()));
             else
-                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getPublisher(), data.getUrl()));
+                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getPublisher(), data.getUrl(), data.getPublishTime()));
 
         }
         adapter.notifyDataSetChanged();

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.example.newsdaily">
 
 
     <!--  授权访问互联网-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+                     tools:ignore="ProtectedPermissions" /><!---SD卡中创建与删除文件的权限!，这里会报错alt+enter就可以-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/><!--SD卡写入的权限!-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.VIBRATE"/><!--震动权限-->
+
+
+
+
 
     <application
             android:allowBackup="true"
@@ -21,7 +30,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity"/>
-        <activity android:name=".CategoriesActivity"/>
     </application>
 
 </manifest>

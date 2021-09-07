@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:background="@drawable/ic_jiahao"
                     android:color="#131212"
-                    android:layout_height="match_parent" android:id="@+id/button2" android:layout_weight="1"/>
+                    android:layout_height="match_parent" android:id="@+id/moreChannelBtn" android:layout_weight="1"/>
         </LinearLayout>
         <androidx.viewpager.widget.ViewPager
                 android:id="@+id/news_view_pager"

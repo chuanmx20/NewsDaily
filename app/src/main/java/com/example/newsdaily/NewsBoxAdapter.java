@@ -35,17 +35,20 @@ public class NewsBoxAdapter extends ArrayAdapter<NewsBoxData> {
             TextView title = convertView.findViewById(R.id.Title);
             TextView des = convertView.findViewById(R.id.Description);
             TextView pub = convertView.findViewById(R.id.publisher);
+            TextView pubTime = convertView.findViewById(R.id.publishTime);
 
             LoadImage loadImage = new LoadImage(imageView);
             loadImage.execute(getItem(position).getCoverImgURL()[0]);
             title.setText(getItem(position).getTitle());
             des.setText(getItem(position).getDescription());
             pub.setText(getItem(position).getPublisher());
+            pubTime.setText(getItem(position).getPublishTime());
         } else {
             TextView title = convertView.findViewById(R.id.Title);
             TextView des = convertView.findViewById(R.id.Description);
             TextView pub = convertView.findViewById(R.id.publisher);
             convertView.findViewById(R.id.coverImg).setVisibility(View.GONE);
+            TextView pubTime = convertView.findViewById(R.id.publishTime);
 
             title.setWidth(parent.getWidth());
             des.setWidth(parent.getWidth());
@@ -54,6 +57,7 @@ public class NewsBoxAdapter extends ArrayAdapter<NewsBoxData> {
             title.setText(getItem(position).getTitle());
             des.setText(getItem(position).getDescription());
             pub.setText(getItem(position).getPublisher());
+            pubTime.setText(getItem(position).getPublishTime());
         }
 
         return convertView;

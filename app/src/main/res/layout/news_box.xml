@@ -30,14 +30,29 @@
                     android:textStyle="normal"
                     android:maxLines="2"
             />
-            <TextView
-                    android:text="TextView"
+            <RelativeLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/publisher"
-                    android:textStyle="italic"
-                    android:singleLine="true"
-                    android:textSize="12dp"
-            />
+                    android:layout_height="match_parent">
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent" android:id="@+id/publisher"
+                        android:textStyle="italic"
+                        android:singleLine="true"
+                        android:textSize="12dp"
+                />
+                <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/publishTime"
+                        android:layout_weight="1"
+                        android:layout_toRightOf="@+id/publisher"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                />
+            </RelativeLayout>
         </LinearLayout>
         <ImageView
                 android:layout_width="200dp"
