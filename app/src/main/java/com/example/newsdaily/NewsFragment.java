@@ -47,6 +47,18 @@ public class NewsFragment extends Fragment {
     String keyWords = "全部";
     String categories = "";
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
     public void setCurPageJson(String _curPageJson) {
         curPageJson = _curPageJson;
     }
@@ -73,10 +85,9 @@ public class NewsFragment extends Fragment {
         categories = category;
     }
 
-    public NewsFragment(String category, String start, String end, String page, String key) {
+    public NewsFragment(String category, String start, String end, String key) {
         startDate = start;
         endDate = end;
-        size = page;
         keyWords = key;
         if (category.equals("全部"))
             return;

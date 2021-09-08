@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ import com.orm.SugarContext;
 import com.orm.SugarDb;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,16 +51,15 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tagBar;
     ViewPager viewPager;
     String keyWords = "";
-    NewsFragment curFragment = null;
+    NewsFragment curFragment = new NewsFragment();
     View channelManageBtn;
 
-    @SuppressLint("SimpleDateFormat") public static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    @SuppressLint("SimpleDateFormat")
+    public static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     TextView startDate;
     String startDateString;
     TextView endDate;
     String endDateString;
-    TextView pageCnt;
-    String pageCntString;
     DatePickerDialog datePickerDialog;
     int curEditingDate = 0; //1 for start and 2 for end
 
@@ -124,11 +126,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRetrieval() {
         startDate = findViewById(R.id.start_date);
-        startDateString = "2000-08-20";
+        startDateString = curFragment.getStartDate();
         endDate = findViewById(R.id.end_date);
-        endDateString = getCurDate();
-        pageCnt = findViewById(R.id.count_page);
-        pageCntString = "15";
+        endDateString = curFragment.getEndDate();
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -138,12 +138,15 @@ public class MainActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                System.out.println("set");
-                System.out.println(year);
                 String date = makeDateString(year, month, dayOfMonth);
-                setTime(date);
+                try {
+                    setTime(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         };
+
 
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
@@ -173,15 +176,25 @@ public class MainActivity extends AppCompatActivity {
         return format.format(System.currentTimeMillis());
     }
 
-    private void setTime(String date) {
+    private void setTime(String date) throws ParseException {
         switch (curEditingDate) {
             case 0 :
                 return;
             case 1:
+                if (format.parse(date).compareTo(format.parse(endDateString)) >= 0) {
+                    Toast.makeText(getBaseContext(),"开始日期不能在截止日期后哦", Toast.LENGTH_LONG).show();
+                    curEditingDate = 0;
+                    return;
+                }
                 startDate.setText(date);
                 startDateString = date;
                 break;
             case 2:
+                if (format.parse(date).compareTo(format.parse(startDateString)) <= 0) {
+                    Toast.makeText(getBaseContext(),"截止日期不能在开始日期之前哦", Toast.LENGTH_LONG).show();
+                    curEditingDate = 0;
+                    return;
+                }
                 endDate.setText(date);
                 endDateString = date;
                 break;
@@ -195,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         curChannels.clear();
         for (ChannelBean channel : channelBeans) {
             if (channel.isSelect()) {
-                newsFragments.add(new NewsFragment(channel.getName(), startDateString, endDateString, pageCntString, keyWords));
+                newsFragments.add(new NewsFragment(channel.getName(), startDateString, endDateString, keyWords));
                 curChannels.add(channel);
             }
         }
@@ -204,7 +217,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String makeDateString(int year, int month, int dayOfMonth) {
-        Date date = new Date(year, month, dayOfMonth);
+        //傻逼google为了支持calendar，不让用户构造date，年份都加了1900
+        //真tm想干啥干啥，日
+        Date date = new Date(year-1900, month, dayOfMonth);
         return format.format(date);
     }
 

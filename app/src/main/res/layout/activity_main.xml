@@ -37,6 +37,7 @@
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:text="开始日期 :" android:layout_alignParentLeft="true"
+                      android:layout_marginLeft="30dp"
                       android:textColor="@color/black"
                       android:id="@+id/hint_start"/>
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -46,7 +47,7 @@
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:text="截止日期 :" android:layout_toRightOf="@+id/start_date"
-                      android:layout_marginLeft="20dp"
+                      android:layout_marginLeft="70dp"
                       android:textColor="@color/black"
                       android:id="@+id/hint_end"/>
 
@@ -54,15 +55,7 @@
                       android:layout_toRightOf="@id/hint_end" android:id="@+id/end_date"
                       android:text="2021-08-20" android:layout_marginLeft="5dp"/>
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/hint_page" android:layout_toRightOf="@id/end_date"
-                      android:text="页数 :" android:textColor="@color/black"
-                      android:layout_marginLeft="20dp"/>
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/count_page" android:layout_marginLeft="5dp"
-                      android:layout_toRightOf="@+id/hint_page"
-                      android:text="15"/>
 
 
 
