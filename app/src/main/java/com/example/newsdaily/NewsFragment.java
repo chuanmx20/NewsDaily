@@ -43,7 +43,7 @@ public class NewsFragment extends Fragment {
     String api = "https://api2.newsminer.net/svc/news/queryNewsList?";
     String size = "15";
     String startDate = "2000-08-20";
-    String endDate = "2021-09-03";
+    String endDate = MainActivity.getCurDate();
     String keyWords = "全部";
     String categories = "";
 
@@ -68,6 +68,16 @@ public class NewsFragment extends Fragment {
     }
 
     public NewsFragment(String category) {
+        if (category.equals("全部"))
+            return;
+        categories = category;
+    }
+
+    public NewsFragment(String category, String start, String end, String page, String key) {
+        startDate = start;
+        endDate = end;
+        size = page;
+        keyWords = key;
         if (category.equals("全部"))
             return;
         categories = category;
@@ -110,6 +120,7 @@ public class NewsFragment extends Fragment {
                 NewsBoxData.deleteAll(NewsBoxData.class);
                 refreshData();
                 System.out.println("Refreshing fragment of " + categories);
+                System.out.println(startDate + "," + endDate + "," + keyWords + "," + size);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -149,19 +160,11 @@ public class NewsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void updateEndTime() {
-        Date now = new Date(System.currentTimeMillis());
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
-        final String timeNow = dataFormat.format(now);
-        endDate = timeNow;
-    }
-
     private void refreshJson() {
         curPageData = new Gson().fromJson(curPageJson, Response.class);
     }
 
     public void refreshData() {
-        updateEndTime();
         UrlCat();
         new fetchData(url).start();
     }
@@ -194,7 +197,6 @@ public class NewsFragment extends Fragment {
                 public void run() {
                     curPageJson = data;
 
-                    System.out.println(data);
                     refreshJson();
                     setListData();
 

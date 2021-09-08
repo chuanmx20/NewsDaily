@@ -2,6 +2,8 @@ package com.example.newsdaily;
 
 import NewsUI.SearchBar;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +31,11 @@ import com.orm.SchemaGenerator;
 import com.orm.SugarContext;
 import com.orm.SugarDb;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
     String keyWords = "";
     NewsFragment curFragment = null;
     View channelManageBtn;
+
+    @SuppressLint("SimpleDateFormat") public static DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    TextView startDate;
+    String startDateString;
+    TextView endDate;
+    String endDateString;
+    TextView pageCnt;
+    String pageCntString;
+    DatePickerDialog datePickerDialog;
+    int curEditingDate = 0; //1 for start and 2 for end
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +100,9 @@ public class MainActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow((IBinder) getWindow().getDecorView().getWindowToken(), 0);
                     keyWords = searchBar.getText().toString();
-                    for (NewsFragment newsFragment : newsFragments) {
-                        newsFragment.setKeyWords(keyWords);
-                    }
-                    if (curFragment != null)
-                        curFragment.refreshData();
+
+                    refreshNewsByDataChange();
+
                     searchBar.clearFocus();
                 }
                 return false;
@@ -101,6 +116,96 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        initRetrieval();
+
+
+    }
+
+    private void initRetrieval() {
+        startDate = findViewById(R.id.start_date);
+        startDateString = "2000-08-20";
+        endDate = findViewById(R.id.end_date);
+        endDateString = getCurDate();
+        pageCnt = findViewById(R.id.count_page);
+        pageCntString = "15";
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                System.out.println("set");
+                System.out.println(year);
+                String date = makeDateString(year, month, dayOfMonth);
+                setTime(date);
+            }
+        };
+
+
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(this, style);
+
+        datePickerDialog.setOnDateSetListener(dateSetListener);
+
+        startDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                curEditingDate = 1;
+                datePickerDialog.show();
+            }
+        });
+
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                curEditingDate = 2;
+                datePickerDialog.show();
+            }
+        });
+
+    }
+
+    public static String getCurDate() {
+        return format.format(System.currentTimeMillis());
+    }
+
+    private void setTime(String date) {
+        switch (curEditingDate) {
+            case 0 :
+                return;
+            case 1:
+                startDate.setText(date);
+                startDateString = date;
+                break;
+            case 2:
+                endDate.setText(date);
+                endDateString = date;
+                break;
+        }
+        curEditingDate = 0;
+        refreshNewsByDataChange();
+    }
+
+    private void refreshNewsByDataChange() {
+        newsFragments.clear();
+        curChannels.clear();
+        for (ChannelBean channel : channelBeans) {
+            if (channel.isSelect()) {
+                newsFragments.add(new NewsFragment(channel.getName(), startDateString, endDateString, pageCntString, keyWords));
+                curChannels.add(channel);
+            }
+        }
+        viewPager.getAdapter().notifyDataSetChanged();
+        tagBar.setupWithViewPager(viewPager);
+    }
+
+    private String makeDateString(int year, int month, int dayOfMonth) {
+        Date date = new Date(year, month, dayOfMonth);
+        return format.format(date);
     }
 
     @SuppressLint("RestrictedApi")
@@ -114,24 +219,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             channelBeans = gson.fromJson(jsonStr, new TypeToken<ArrayList<ChannelBean>>(){}.getType());
 
-            for (NewsFragment fragment : newsFragments) {
-                getSupportFragmentManager().openTransaction().remove(fragment);
-            }
-            getSupportFragmentManager().openTransaction().commit();
-
-            newsFragments.clear();
-            curChannels.clear();
-            for (ChannelBean channel : channelBeans) {
-                if (channel.isSelect()) {
-                    newsFragments.add(new NewsFragment(channel.getName()));
-                    curChannels.add(channel);
-                }
-            }
-            viewPager.getAdapter().notifyDataSetChanged();
-
-            tagBar.setupWithViewPager(viewPager);
-
-
+            refreshNewsByDataChange();
         }
 
 
