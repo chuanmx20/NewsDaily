@@ -1,48 +1,35 @@
 package com.example.newsdaily;
 
+import NewsUI.SearchBar;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import androidx.fragment.app.*;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
+import com.andy.library.*;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
-import NewsUI.NewsBoxData;
-import java.lang.reflect.Type;
-
-import java.net.*;
-import java.io.*;
-
 import com.google.gson.reflect.TypeToken;
-import jsonBean.DataItem;
-import jsonBean.Response;
-import NewsUI.*;
-import java.lang.Object;
-import java.nio.channels.Channel;
-import java.text.SimpleDateFormat;
+import com.orm.SchemaGenerator;
+import com.orm.SugarContext;
+import com.orm.SugarDb;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-import com.andy.library.*;
+
 
 public class MainActivity extends AppCompatActivity {
     //娱乐、军事、教育、文化、健康、财经、体育、汽车、科技、社会
@@ -53,14 +40,21 @@ public class MainActivity extends AppCompatActivity {
     SearchBar searchBar;
     TabLayout tagBar;
     ViewPager viewPager;
-    String keyWords = "科技";
+    String keyWords = "";
     NewsFragment curFragment = null;
-    Button channelManageBtn;
+    View channelManageBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+        ReconstructDatabase(this);
 
         tagBar = (TabLayout) findViewById(R.id.news_tab_layout);
         viewPager = findViewById(R.id.news_view_pager);
@@ -103,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
         channelManageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChannelActivity.startChannelActivity(MainActivity.this, channelBeans);
+                ChannelActivity.startChannelForResult(MainActivity.this, channelBeans);
+
             }
         });
     }
@@ -182,4 +177,15 @@ public class MainActivity extends AppCompatActivity {
             return mNewsFragment.get(position).hashCode();
         }
     }
+
+
+
+    public static void ReconstructDatabase(Context applicationContext){
+        SugarContext.terminate();
+        SchemaGenerator schemaGenerator = new SchemaGenerator(applicationContext);
+        schemaGenerator.deleteTables(new SugarDb(applicationContext).getDB());
+        SugarContext.init(applicationContext);
+        schemaGenerator.createDatabase(new SugarDb(applicationContext).getDB());
+    }
+
 }

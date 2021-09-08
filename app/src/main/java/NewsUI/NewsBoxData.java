@@ -1,6 +1,10 @@
 package NewsUI;
 
-public class NewsBoxData {
+import com.orm.SugarRecord;
+
+import java.util.List;
+
+public class NewsBoxData extends SugarRecord {
     String title;
     String Description;
     String[] coverImgURL;
@@ -18,6 +22,8 @@ public class NewsBoxData {
         hasImg = true;
         publishTime = _publishTime;
     }
+
+    public NewsBoxData() {}
 
     public NewsBoxData(String t, String d, String p, String _detailUrl, String _publishTIme) {
         title = t;
@@ -74,4 +80,17 @@ public class NewsBoxData {
     public String getDetailUrl() {
         return detailUrl;
     }
+
+
+    public static boolean isVisited(NewsBoxData newsBoxData) {
+        List<NewsBoxData> list = NewsBoxData.listAll(NewsBoxData.class);
+        if (list.isEmpty()) return false;
+        for (NewsBoxData news : list) {
+            if (news.getTitle().equals(newsBoxData.getTitle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

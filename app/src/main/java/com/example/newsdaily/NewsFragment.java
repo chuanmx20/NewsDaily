@@ -44,7 +44,7 @@ public class NewsFragment extends Fragment {
     String size = "15";
     String startDate = "2000-08-20";
     String endDate = "2021-09-03";
-    String keyWords = "拜登";
+    String keyWords = "";
     String categories = "科技";
 
     public void setCurPageJson(String _curPageJson) {
@@ -96,19 +96,23 @@ public class NewsFragment extends Fragment {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("url", newsBoxDataArray.get(position).getDetailUrl());
                 startActivity(intent);
+                newsBoxDataArray.get(position).save();
+                NewsBoxAdapter.visit(view);
+                view.invalidate();
             }
-
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                NewsBoxData.deleteAll(NewsBoxData.class);
                 refreshData();
                 System.out.println("Refreshing fragment of " + categories);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
+
 
     @Override
     public void onStart() {

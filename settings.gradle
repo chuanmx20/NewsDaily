@@ -1,2 +1,3 @@
 rootProject.name = "NewsDaily"
-include ':app'
+include ':app', ':drag_library'
+include ':mylibrary'

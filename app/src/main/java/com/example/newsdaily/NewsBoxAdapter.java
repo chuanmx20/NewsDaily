@@ -1,12 +1,16 @@
 package com.example.newsdaily;
 
 import NewsUI.NewsBoxData;
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +27,7 @@ public class NewsBoxAdapter extends ArrayAdapter<NewsBoxData> {
         this.mResource = resource;
     }
 
+    @SuppressLint("ViewHolder")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -60,6 +65,17 @@ public class NewsBoxAdapter extends ArrayAdapter<NewsBoxData> {
             pubTime.setText(getItem(position).getPublishTime());
         }
 
+        if (NewsBoxData.isVisited(getItem(position))) {
+            visit(convertView);
+        }
+
         return convertView;
+    }
+
+    public static void visit(View view) {
+        TextView title = view.findViewById(R.id.Title);
+        TextView des = view.findViewById(R.id.Description);
+        title.setTextColor(Color.rgb(133, 116, 116));
+        des.setTextColor(Color.rgb(133, 116, 116));
     }
 }
