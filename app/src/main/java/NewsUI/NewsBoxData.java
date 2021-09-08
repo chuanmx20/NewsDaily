@@ -8,9 +8,9 @@ public class NewsBoxData extends SugarRecord {
     String title;
     String Description;
     String[] coverImgURL;
-    String publisher;
-    String detailUrl = "https://blog.csdn.net/YHyanghaoaixin/article/details/84772510?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-4.essearch_pc_relevant&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-4.essearch_pc_relevant";
-    String publishTime;
+    String publisher = "";
+    String detailUrl = "";
+    String publishTime = "";
     boolean hasImg;
 
     public NewsBoxData(String t, String d, String[] c, String p, String _detailUrl, String _publishTime) {

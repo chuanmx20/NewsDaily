@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     //娱乐、军事、教育、文化、健康、财经、体育、汽车、科技、社会
-    String[] categoriesList = {"娱乐", "军事", "教育", "文化", "健康", "财经", "体育", "汽车", "科技", "社会"};
+    String[] categoriesList = {"全部", "娱乐", "军事", "教育", "文化", "健康", "财经", "体育", "汽车", "科技", "社会"};
     ArrayList<ChannelBean> channelBeans;
     ArrayList<ChannelBean> curChannels;
     ArrayList<NewsFragment> newsFragments;
@@ -158,7 +158,12 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return mNewsFragment.get(position).getCategories();
+            String ret =  mNewsFragment.get(position).getCategories();
+
+            if (ret.equals("")) {
+                return "全部";
+            }
+            return ret;
         }
 
         @Override

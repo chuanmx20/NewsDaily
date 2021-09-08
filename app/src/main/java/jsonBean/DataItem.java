@@ -75,6 +75,9 @@ public class DataItem{
 		if (image.equals("[]"))
 			return null;
 		//divide image string
+		if (image.substring(1, image.length() - 1).split(", ").length == 0) {
+			return null;
+		}
 		return image.substring(1, image.length() - 1).split(", ");
 	}
 

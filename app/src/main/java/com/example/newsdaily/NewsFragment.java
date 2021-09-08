@@ -44,8 +44,8 @@ public class NewsFragment extends Fragment {
     String size = "15";
     String startDate = "2000-08-20";
     String endDate = "2021-09-03";
-    String keyWords = "";
-    String categories = "科技";
+    String keyWords = "全部";
+    String categories = "";
 
     public void setCurPageJson(String _curPageJson) {
         curPageJson = _curPageJson;
@@ -68,6 +68,8 @@ public class NewsFragment extends Fragment {
     }
 
     public NewsFragment(String category) {
+        if (category.equals("全部"))
+            return;
         categories = category;
     }
 
@@ -191,6 +193,8 @@ public class NewsFragment extends Fragment {
                 @Override
                 public void run() {
                     curPageJson = data;
+
+                    System.out.println(data);
                     refreshJson();
                     setListData();
 
