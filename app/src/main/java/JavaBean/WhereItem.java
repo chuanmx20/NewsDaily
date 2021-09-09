@@ -1,8 +1,8 @@
-package jsonBean;
+package JavaBean;
 
 import com.google.gson.annotations.SerializedName;
 
-public class KeywordsItem{
+public class WhereItem{
 
 	@SerializedName("score")
 	private double score;
@@ -29,7 +29,7 @@ public class KeywordsItem{
 	@Override
  	public String toString(){
 		return 
-			"KeywordsItem{" + 
+			"WhereItem{" + 
 			"score = '" + score + '\'' + 
 			",word = '" + word + '\'' + 
 			"}";

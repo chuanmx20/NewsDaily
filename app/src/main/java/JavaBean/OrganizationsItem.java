@@ -1,4 +1,4 @@
-package jsonBean;
+package JavaBean;
 
 import com.google.gson.annotations.SerializedName;
 
