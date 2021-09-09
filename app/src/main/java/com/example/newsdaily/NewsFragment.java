@@ -127,7 +127,6 @@ public class NewsFragment extends Fragment {
                 refreshData();
                 System.out.println("Refreshing fragment of " + categories);
                 System.out.println(startDate + "," + endDate + "," + keyWords + "," + size);
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -206,6 +205,7 @@ public class NewsFragment extends Fragment {
                     refreshJson();
                     setListData();
 
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
         }

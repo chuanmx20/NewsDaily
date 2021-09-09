@@ -151,13 +151,20 @@ public class MainActivity extends AppCompatActivity {
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
         datePickerDialog = new DatePickerDialog(this, style);
-
         datePickerDialog.setOnDateSetListener(dateSetListener);
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+
 
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 curEditingDate = 1;
+                try {
+                    Date start_date = format.parse(startDateString);
+                    datePickerDialog.getDatePicker().updateDate(start_date.getYear() + 1900, start_date.getMonth(), start_date.getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 datePickerDialog.show();
             }
         });
@@ -166,6 +173,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 curEditingDate = 2;
+                try {
+                    Date end_date = format.parse(endDateString);
+                    datePickerDialog.getDatePicker().updateDate(end_date.getYear() + 1900, end_date.getMonth(), end_date.getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 datePickerDialog.show();
             }
         });
