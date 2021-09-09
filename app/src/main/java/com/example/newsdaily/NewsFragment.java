@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
@@ -22,10 +23,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewsFragment extends Fragment {
+    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Handler mainHandler = new Handler();
     SwipeRefreshLayout swipeRefreshLayout;
     ListView newsList;
@@ -129,6 +134,45 @@ public class NewsFragment extends Fragment {
                 System.out.println(startDate + "," + endDate + "," + keyWords + "," + size);
             }
         });
+
+        newsList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        if (view.getLastVisiblePosition() == (view.getCount() - 1)) {
+
+                            try {
+                                LoadMoreNews();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+    }
+
+    private void LoadMoreNews() throws ParseException {
+        String LoadMoreUrl = api + "size=" + size + "&" + "startDate=" + startDate + "&" + "endDate=" + getLastDate() + "&" + "words=" + keyWords + "&" + "categories=" + categories;
+        new fetchData(LoadMoreUrl, false).start();
+        refreshJson();
+        setListData(false);
+    }
+
+    private String getLastDate() throws ParseException {
+        String ed = newsBoxDataArray.get(newsList.getCount()-1).getDate();
+        Date lastItemDate = simpleDateFormat.parse(ed);
+        lastItemDate.setDate(lastItemDate.getDate()-1);
+        return MainActivity.format.format(lastItemDate);
     }
 
 
@@ -148,18 +192,18 @@ public class NewsFragment extends Fragment {
 
     }
 
-    private void setListData() {
+    private void setListData(boolean refresh) {
         if (curPageData == null) {
             return;
         }
-        if (!newsBoxDataArray.isEmpty())
+        if (!newsBoxDataArray.isEmpty() && refresh)
             newsBoxDataArray.clear();
         for (DataItem data : curPageData.getData()) {
 
             if (data.getImageUrls() != null)
-                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getImageUrls(), data.getPublisher(), data.getUrl(), data.getPublishTime()));
+                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getImageUrls(), data.getPublisher(), data.getUrl(), data.getPublishTime(), data.getPublishTime()));
             else
-                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getPublisher(), data.getUrl(), data.getPublishTime()));
+                newsBoxDataArray.add(new NewsBoxData(data.getTitle(), data.getContent(), data.getPublisher(), data.getUrl(), data.getPublishTime(), data.getPublishTime()));
 
         }
         adapter.notifyDataSetChanged();
@@ -171,14 +215,18 @@ public class NewsFragment extends Fragment {
 
     public void refreshData() {
         UrlCat();
-        new fetchData(url).start();
+        new fetchData(url, true).start();
+
+
     }
 
     class fetchData extends Thread {
         String data = "";
         String mUrl = "";
-        public fetchData(String _url) {
+        boolean refresh;
+        public fetchData(String _url, boolean _refresh) {
             mUrl = _url;
+            refresh = _refresh;
         }
         @Override
         public void run() {
@@ -203,7 +251,7 @@ public class NewsFragment extends Fragment {
                     curPageJson = data;
 
                     refreshJson();
-                    setListData();
+                    setListData(refresh);
 
                     swipeRefreshLayout.setRefreshing(false);
                 }

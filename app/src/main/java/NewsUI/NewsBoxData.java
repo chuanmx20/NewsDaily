@@ -12,8 +12,9 @@ public class NewsBoxData extends SugarRecord {
     String detailUrl = "";
     String publishTime = "";
     boolean hasImg;
+    String date = "";
 
-    public NewsBoxData(String t, String d, String[] c, String p, String _detailUrl, String _publishTime) {
+    public NewsBoxData(String t, String d, String[] c, String p, String _detailUrl, String _publishTime, String date) {
         title = t;
         Description = d;
         coverImgURL = c;
@@ -21,18 +22,25 @@ public class NewsBoxData extends SugarRecord {
         detailUrl = _detailUrl;
         hasImg = true;
         publishTime = _publishTime;
+        this.date = date;
     }
 
     public NewsBoxData() {}
 
-    public NewsBoxData(String t, String d, String p, String _detailUrl, String _publishTIme) {
+    public NewsBoxData(String t, String d, String p, String _detailUrl, String _publishTIme, String date) {
         title = t;
         Description = d;
         publisher = p;
         detailUrl = _detailUrl;
         hasImg = false;
         publishTime = _publishTIme;
+        this.date = date;
     }
+
+    public String getDate() {
+        return date;
+    }
+
     public String getTitle() {
         return title;
     }
