@@ -1,6 +1,7 @@
 package com.example.newsdaily;
 
 import NewsUI.NewsBoxData;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NewsFragment extends Fragment {
+    @SuppressLint("SimpleDateFormat")
     static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Handler mainHandler = new Handler();
     SwipeRefreshLayout swipeRefreshLayout;
@@ -43,7 +45,7 @@ public class NewsFragment extends Fragment {
     String api = "https://api2.newsminer.net/svc/news/queryNewsList?";
     String size = "15";
     String startDate = "2000-08-20";
-    String endDate = MainActivity.getCurDate();
+    String endDate = MainFragment.getCurDate();
     String keyWords = "全部";
     String categories = "";
 
@@ -172,7 +174,7 @@ public class NewsFragment extends Fragment {
         String ed = newsBoxDataArray.get(newsList.getCount()-1).getDate();
         Date lastItemDate = simpleDateFormat.parse(ed);
         lastItemDate.setDate(lastItemDate.getDate()-1);
-        return MainActivity.format.format(lastItemDate);
+        return MainFragment.format.format(lastItemDate);
     }
 
 
