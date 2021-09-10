@@ -121,9 +121,22 @@ public class NewsFragment extends Fragment {
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("url", newsBoxDataArray.get(position).getDetailUrl());
                 startActivity(intent);
-                newsBoxDataArray.get(position).save();
-                MainActivity.refreshHistoryList();
-                NewsBoxAdapter.visit(view);
+                //if not visited
+                if (!NewsBoxData.isVisited(newsBoxDataArray.get(position))) {
+                    newsBoxDataArray.get(position).save();
+                    MainActivity.refreshHistoryList();
+                    NewsBoxAdapter.visit(view);
+                } else {
+//                    NewsBoxData.find(NewsBoxData.class, "detailUrl=?", newsBoxDataArray.get(position).getDetailUrl()).get(0).delete();
+                    for (NewsBoxData news: NewsBoxData.listAll(NewsBoxData.class)) {
+                        if (news.getDetailUrl().equals(newsBoxDataArray.get(position).getDetailUrl())) {
+                            news.delete();
+                        }
+                    }
+                }
+
+                //if visited
+                //find the record in database, delete it, and add a new one to the top of database
                 view.invalidate();
             }
         });
