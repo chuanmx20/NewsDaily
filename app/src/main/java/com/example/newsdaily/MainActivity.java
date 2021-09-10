@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         //透明导航栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        ReconstructDatabase(this);
+        //ReconstructDatabase(AppApplication.getApp());
+        SugarContext.init(AppApplication.getApp());
 
         fragments.add(new MainFragment());
         fragments.add(new SetupFragment());
