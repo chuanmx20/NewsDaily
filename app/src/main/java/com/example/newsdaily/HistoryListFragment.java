@@ -14,37 +14,46 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryListActivity extends AppCompatActivity {
+public class HistoryListFragment extends Fragment {
     ArrayList<NewsBoxData> historyData;
-    ListView historyList;
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_list);
-        //透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        //透明导航栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+    public ListView historyList;
 
-        historyList = findViewById(R.id.history_box_list);
-        historyData = new ArrayList<>();
-        System.out.println(NewsBoxData.count(NewsBoxData.class));
-        historyData.addAll(NewsBoxData.listAll(NewsBoxData.class));
-        HistoryBoxAdapter adapter = new HistoryBoxAdapter(this, R.layout.news_box, historyData);
-        historyList.setAdapter(adapter);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_history_list, container, false);
+        historyList = view.findViewById(R.id.history_box_list);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        historyData = (ArrayList<NewsBoxData>) NewsBoxData.listAll(NewsBoxData.class);
+        historyList.setAdapter(new HistoryBoxAdapter(getContext(), R.layout.news_box, historyData));
+
+        for (NewsBoxData news : NewsBoxData.listAll(NewsBoxData.class)) {
+            System.out.println(news.getTitle());
+        }
+
         historyList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //页面跳转
-                Intent intent = new Intent(HistoryListActivity.this, DetailActivity.class);
+                Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("url", historyData.get(position).getDetailUrl());
                 startActivity(intent);
             }
         });
+    }
+
+    public void refreshList() {
+        historyList.setAdapter(new HistoryBoxAdapter(getContext(), R.layout.news_box, NewsBoxData.listAll(NewsBoxData.class)));
     }
 
     class HistoryBoxAdapter extends ArrayAdapter<NewsBoxData> {
@@ -57,6 +66,12 @@ public class HistoryListActivity extends AppCompatActivity {
             this.mResource = resource;
         }
 
+        @Nullable
+        @Override
+        public NewsBoxData getItem(int position) {
+            return NewsBoxData.listAll(NewsBoxData.class).get(position);
+        }
+
         @SuppressLint("ViewHolder")
         @NonNull
         @Override
@@ -64,6 +79,8 @@ public class HistoryListActivity extends AppCompatActivity {
             LayoutInflater layoutInflater  = LayoutInflater.from(mContext);
 
             convertView = layoutInflater.inflate(mResource, parent, false);
+
+            System.out.println(getItem(position).getTitle());
 
             if (getItem(position).hasImg()) {
                 ImageView imageView = convertView.findViewById(R.id.coverImg);

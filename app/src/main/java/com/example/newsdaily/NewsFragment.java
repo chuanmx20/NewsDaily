@@ -122,6 +122,7 @@ public class NewsFragment extends Fragment {
                 intent.putExtra("url", newsBoxDataArray.get(position).getDetailUrl());
                 startActivity(intent);
                 newsBoxDataArray.get(position).save();
+                MainActivity.refreshHistoryList();
                 NewsBoxAdapter.visit(view);
                 view.invalidate();
             }
@@ -132,6 +133,7 @@ public class NewsFragment extends Fragment {
             public void onRefresh() {
                 NewsBoxData.deleteAll(NewsBoxData.class);
                 refreshData();
+                MainActivity.refreshHistoryList();
                 System.out.println("Refreshing fragment of " + categories);
                 System.out.println(startDate + "," + endDate + "," + keyWords + "," + size);
             }

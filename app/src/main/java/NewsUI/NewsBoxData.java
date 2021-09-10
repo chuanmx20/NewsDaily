@@ -82,7 +82,7 @@ public class NewsBoxData extends SugarRecord {
     }
 
     public boolean hasImg() {
-        return hasImg;
+        return hasImg && coverImgURL != null;
     }
 
     public String getDetailUrl() {

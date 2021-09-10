@@ -38,8 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainFragment extends Fragment {
-    String[] categoriesList = {"全部", "娱乐", "军事", "教育", "文化", "健康", "财经", "体育", "汽车", "科技", "社会"};
-    ArrayList<ChannelBean> channelBeans;
+    public static String[] categoriesList = {"全部", "娱乐", "军事", "教育", "文化", "健康", "财经", "体育", "汽车", "科技", "社会"};
+    public static ArrayList<ChannelBean> channelBeans;
     ArrayList<ChannelBean> curChannels;
     ArrayList<NewsFragment> newsFragments;
     SearchBar searchBar;
@@ -74,9 +74,8 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         newsFragments = new ArrayList<>();
 
         channelBeans = new ArrayList<>();
@@ -87,6 +86,11 @@ public class MainFragment extends Fragment {
             curChannels.add(bean);
             newsFragments.add(new NewsFragment(channel));
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         viewPager.setAdapter(new FragmentAdapter(getActivity().getSupportFragmentManager(), newsFragments));
 

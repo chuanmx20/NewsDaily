@@ -71,7 +71,7 @@ public class DataItem{
 	}
 
 	public String[] getImageUrls() {
-		if (image.equals("[]") || image.isEmpty() ||!image.substring(0, 1).equals("["))
+		if (image.equals("[]") || image.isEmpty() || image.charAt(0) != '[')
 			return null;
 		//divide image string
 		if (image.substring(1, image.length() - 1).split(", ").length == 0) {

@@ -27,7 +27,7 @@ public class SetupFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), HistoryListActivity.class);
+                Intent intent = new Intent(getContext(), HistoryListFragment.class);
                 startActivity(intent);
             }
         });
