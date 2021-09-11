@@ -1,5 +1,6 @@
 package com.example.newsdaily;
 
+import NewsUI.Collection;
 import NewsUI.NewsBoxData;
 import android.annotation.SuppressLint;
 import android.content.Intent;

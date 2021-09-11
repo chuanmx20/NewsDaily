@@ -1,15 +1,14 @@
-package com.example.newsdaily;
+package NewsUI;
 
-import com.orm.SugarContext;
 import com.orm.SugarRecord;
 
 public class Collection extends SugarRecord {
-    String detailUrl = "";
+    public String detailUrl = "";
     public Collection() {}
     public Collection(String detailURL) {
         this.detailUrl = detailURL;
     }
-    static boolean inCollection(String url) {
+    public static boolean inCollection(String url) {
         for (Collection collection : Collection.listAll(Collection.class)) {
             if (collection.equals(url))
                 return true;

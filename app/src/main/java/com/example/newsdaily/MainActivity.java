@@ -1,5 +1,6 @@
 package com.example.newsdaily;
 
+import NewsUI.Collection;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
