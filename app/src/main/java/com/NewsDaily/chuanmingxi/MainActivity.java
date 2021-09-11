@@ -1,4 +1,4 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import NewsUI.Collection;
 import android.content.Context;
@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.andy.library.*;
+import com.example.chuanmingxi.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.orm.SchemaGenerator;
 import com.orm.SugarContext;
@@ -31,11 +32,19 @@ public class MainActivity extends AppCompatActivity {
     public static void refreshCollectionList() {
         ((CollectionListFragment) fragments.get(2)).refreshList();
     }
+    public static void refreshMainList() {
+        ((MainFragment) fragments.get(0)).refreshList();
+    }
+    public static void refreshAllList() {
+        refreshCollectionList();
+        refreshMainList();
+        refreshHistoryList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(com.example.chuanmingxi.R.layout.activity_main);
 
         //透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -49,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new HistoryListFragment());
         fragments.add(new CollectionListFragment());
 
-        ViewPager contentViewPager = findViewById(R.id.content_view_pager);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        ViewPager contentViewPager = findViewById(com.example.chuanmingxi.R.id.content_view_pager);
+        BottomNavigationView bottomNav = findViewById(com.example.chuanmingxi.R.id.bottom_nav);
 
         contentViewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         contentViewPager.setOffscreenPageLimit(2);
@@ -58,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_main:
+                    case com.example.chuanmingxi.R.id.nav_main:
                         contentViewPager.setCurrentItem(0);
                         break;
-                    case R.id.nav_history:
+                    case com.example.chuanmingxi.R.id.nav_history:
                         contentViewPager.setCurrentItem(1);
                         break;
                     case R.id.nav_collection:
@@ -108,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
             if (col) {
                 new Collection(url).save();
             }
-
             refreshCollectionList();
         }
     }

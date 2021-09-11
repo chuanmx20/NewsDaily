@@ -1,9 +1,8 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import NewsUI.SearchBar;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.andy.library.ChannelActivity;
 import com.andy.library.ChannelBean;
+import com.example.chuanmingxi.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -186,6 +186,9 @@ public class MainFragment extends Fragment {
 
     }
 
+    public void refreshList() {
+        viewPager.getAdapter().notifyDataSetChanged();
+    }
     public static String getCurDate() {
         return format.format(System.currentTimeMillis());
     }

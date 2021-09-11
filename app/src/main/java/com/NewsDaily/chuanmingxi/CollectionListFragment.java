@@ -1,4 +1,4 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import NewsUI.Collection;
 import NewsUI.NewsBoxData;
@@ -14,20 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.chuanmingxi.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryListFragment extends Fragment {
-    ArrayList<NewsBoxData> historyData;
+public class CollectionListFragment extends Fragment {
+    ArrayList<NewsBoxData> CollectionData;
+    public ListView CollectionList;
     SwipeRefreshLayout clearSwiper;
-    public ListView historyList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history_list, container, false);
-        historyList = view.findViewById(R.id.history_box_list);
+        View view = inflater.inflate(R.layout.fragment_collection_list, container, false);
+        CollectionList = view.findViewById(R.id.collection_box_list);
         clearSwiper = view.findViewById(R.id.clear_swiper);
         return view;
     }
@@ -35,44 +36,53 @@ public class HistoryListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        historyData = (ArrayList<NewsBoxData>) NewsBoxData.listAll(NewsBoxData.class);
-        historyList.setAdapter(new HistoryBoxAdapter(getContext(), R.layout.news_box, historyData));
+        CollectionData = new ArrayList<>();
+        updateArray();
+        CollectionList.setAdapter(new CollectionBoxAdapter(getContext(), R.layout.news_box, CollectionData));
 
-        for (NewsBoxData news : NewsBoxData.listAll(NewsBoxData.class)) {
-            System.out.println(news.getTitle());
-        }
+        CollectionList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //页面跳转
+                Intent intent = new Intent(getContext(), DetailActivity.class);
+                intent.putExtra("url", CollectionData.get(position).getDetailUrl());
+                intent.putExtra("collect", Collection.inCollection(CollectionData.get(position).getDetailUrl()));
+                startActivityForResult(intent, 2);
+            }
+        });
 
         clearSwiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 NewsBoxData.deleteAll(NewsBoxData.class);
                 Collection.deleteAll(Collection.class);
-                MainActivity.refreshHistoryList();
-                MainActivity.refreshCollectionList();
+                MainActivity.refreshAllList();
                 clearSwiper.setRefreshing(false);
             }
         });
-        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //页面跳转
-                Intent intent = new Intent(getContext(), DetailActivity.class);
-                intent.putExtra("url", historyData.get(position).getDetailUrl());
-                intent.putExtra("collect", Collection.inCollection(historyData.get(position).getDetailUrl()));
-                startActivityForResult(intent, 2);
+    }
+
+    private void updateArray() {
+        CollectionData.clear();
+        for (Collection collection : Collection.listAll(Collection.class)) {
+            for (NewsBoxData news : NewsBoxData.listAll(NewsBoxData.class)) {
+                if (news.getDetailUrl().equals(collection.detailUrl)) {
+                    CollectionData.add(news);
+                }
             }
-        });
+        }
     }
 
     public void refreshList() {
-        historyList.setAdapter(new HistoryBoxAdapter(getContext(), R.layout.news_box, NewsBoxData.listAll(NewsBoxData.class)));
+        updateArray();
+        CollectionList.setAdapter(new HistoryListFragment.HistoryBoxAdapter(getContext(), R.layout.news_box, CollectionData));
     }
 
-    static class HistoryBoxAdapter extends ArrayAdapter<NewsBoxData> {
+    class CollectionBoxAdapter extends ArrayAdapter<NewsBoxData> {
         private Context mContext;
         private int mResource;
 
-        public HistoryBoxAdapter(@NonNull Context context, int resource, @NonNull List<NewsBoxData> objects) {
+        public CollectionBoxAdapter(@NonNull Context context, int resource, @NonNull List<NewsBoxData> objects) {
             super(context, resource, objects);
             this.mContext = context;
             this.mResource = resource;
@@ -81,7 +91,7 @@ public class HistoryListFragment extends Fragment {
         @Nullable
         @Override
         public NewsBoxData getItem(int position) {
-            return NewsBoxData.listAll(NewsBoxData.class).get(position);
+            return CollectionData.get(position);
         }
 
         @SuppressLint("ViewHolder")

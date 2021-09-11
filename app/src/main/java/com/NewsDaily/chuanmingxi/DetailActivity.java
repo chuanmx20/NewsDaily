@@ -1,17 +1,23 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.chuanmingxi.R;
+
+import static android.content.ContentValues.TAG;
 
 public class DetailActivity extends AppCompatActivity {
+    private static final String APP_CACHE_DIRNAME = "wedStorage";
     View backBtn;
     View collectBtn;
     boolean isCollected;
@@ -32,10 +38,20 @@ public class DetailActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         url = getIntent().getStringExtra("url");
         isCollected = getIntent().getBooleanExtra("collect", false);
-        System.out.println(isCollected);
         collectBtn.setBackgroundResource(isCollected ? R.drawable.ic_star_fill : R.drawable.ic_star);
 
         WebView webView = findViewById(R.id.news_web);
+        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); // 设置缓存模式
+        webView.getSettings().setDomStorageEnabled(true);       //DOM storage API
+        webView.getSettings().setDatabaseEnabled(true);         //database storage
+        String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
+        Log.i(TAG, "cachePath=" + cacheDirPath);
+        webView.getSettings().setDatabasePath(cacheDirPath);
+        webView.getSettings().setAppCachePath(cacheDirPath);
+        webView.getSettings().setAppCacheEnabled(true);
+                
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient(){

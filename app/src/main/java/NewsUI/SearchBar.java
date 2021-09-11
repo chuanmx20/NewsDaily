@@ -5,16 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
-import androidx.core.content.ContextCompat;
-import com.example.newsdaily.MainActivity;
-import com.example.newsdaily.R;
-import com.example.newsdaily.MainActivity;
-import java.lang.reflect.Type;
+import com.example.chuanmingxi.R;
 
 public class SearchBar extends androidx.appcompat.widget.AppCompatEditText {
 

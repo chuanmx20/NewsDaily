@@ -1,4 +1,4 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class LoadImage extends AsyncTask<String, Void, Bitmap> {

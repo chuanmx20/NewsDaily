@@ -101,4 +101,14 @@ public class NewsBoxData extends SugarRecord {
         return false;
     }
 
+    public static boolean isVisited(String url) {
+        List<NewsBoxData> list = NewsBoxData.listAll(NewsBoxData.class);
+        if (list.isEmpty()) return false;
+        for (NewsBoxData news : list) {
+            if (news.detailUrl.equals(url)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

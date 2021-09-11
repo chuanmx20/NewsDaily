@@ -1,4 +1,4 @@
-package com.example.newsdaily;
+package com.NewsDaily.chuanmingxi;
 
 import NewsUI.Collection;
 import NewsUI.NewsBoxData;
@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.chuanmingxi.R;
 import com.google.gson.Gson;
 import JavaBean.DataItem;
 import JavaBean.Response;
@@ -124,7 +125,6 @@ public class NewsFragment extends Fragment {
                 intent.putExtra("collect", Collection.inCollection(newsBoxDataArray.get(position).getDetailUrl()));
                 //if not visited
                 if (NewsBoxData.isVisited(newsBoxDataArray.get(position))){
-//                    NewsBoxData.find(NewsBoxData.class, "detailUrl=?", newsBoxDataArray.get(position).getDetailUrl()).get(0).delete();
                     for (NewsBoxData news: NewsBoxData.listAll(NewsBoxData.class)) {
                         if (news.getDetailUrl().equals(newsBoxDataArray.get(position).getDetailUrl())) {
                             news.delete();
@@ -136,8 +136,6 @@ public class NewsFragment extends Fragment {
                 MainActivity.refreshHistoryList();
                 NewsBoxAdapter.visit(view);
                 startActivityForResult(intent, 2);
-                //if visited
-                //find the record in database, delete it, and add a new one to the top of database
                 view.invalidate();
             }
         });
@@ -146,8 +144,6 @@ public class NewsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 refreshData();
-                System.out.println("Refreshing fragment of " + categories);
-                System.out.println(startDate + "," + endDate + "," + keyWords + "," + size);
             }
         });
 
