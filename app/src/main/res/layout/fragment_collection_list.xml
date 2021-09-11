@@ -3,6 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
     <TextView android:layout_width="match_parent" android:layout_height="50dp"
+              android:id="@+id/title_text"
               android:text="我的收藏"
               android:layout_centerHorizontal="true"
               android:textAlignment="center"
@@ -10,7 +11,26 @@
               android:textSize="16dp"
               android:gravity="center"
               android:background="#9A6492F1"/>
+    <TextView android:layout_width="match_parent" android:layout_height="20dp"
+              android:hint="下拉清除所有记录(包括收藏夹)"
+              android:layout_centerHorizontal="true"
+              android:textAlignment="center"
+              android:textStyle="normal"
+              android:textSize="16dp"
+              android:gravity="center"
+              android:background="#6B769DED"
+              android:layout_below="@+id/title_text"/>
 
-    <ListView android:layout_width="match_parent" android:layout_height="match_parent"
-              android:layout_marginTop="50dp" android:id="@+id/collection_box_list"/>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@id/clear_swiper"
+            android:layout_marginTop="70dp">
+
+        <ListView android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:layout_marginTop="70dp" android:id="@+id/collection_box_list"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 </RelativeLayout>

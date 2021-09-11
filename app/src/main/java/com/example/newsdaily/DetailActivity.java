@@ -32,6 +32,7 @@ public class DetailActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         url = getIntent().getStringExtra("url");
         isCollected = getIntent().getBooleanExtra("collect", false);
+        System.out.println(isCollected);
         collectBtn.setBackgroundResource(isCollected ? R.drawable.ic_star_fill : R.drawable.ic_star);
 
         WebView webView = findViewById(R.id.news_web);
@@ -44,10 +45,6 @@ public class DetailActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("url", url);
-                intent.putExtra("collect", isCollected);
-                setResult(2, intent);
                 finish();
             }
         });
@@ -64,12 +61,17 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent intent = new Intent();
-            intent.putExtra("url", url);
-            intent.putExtra("collect", isCollected);
-            setResult(2, intent);
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        Intent intent = new Intent();
+        intent.putExtra("url", url);
+        intent.putExtra("collect", isCollected);
+        setResult(2, intent);
+        super.finish();
     }
 }

@@ -13,6 +13,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,14 @@ import java.util.List;
 public class CollectionListFragment extends Fragment {
     ArrayList<NewsBoxData> CollectionData;
     public ListView CollectionList;
+    SwipeRefreshLayout clearSwiper;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_history_list, container, false);
-        CollectionList = view.findViewById(R.id.history_box_list);
+        View view = inflater.inflate(R.layout.fragment_collection_list, container, false);
+        CollectionList = view.findViewById(R.id.collection_box_list);
+        clearSwiper = view.findViewById(R.id.clear_swiper);
         return view;
     }
 
@@ -44,6 +47,17 @@ public class CollectionListFragment extends Fragment {
                 intent.putExtra("url", CollectionData.get(position).getDetailUrl());
                 intent.putExtra("collect", Collection.inCollection(CollectionData.get(position).getDetailUrl()));
                 startActivityForResult(intent, 2);
+            }
+        });
+
+        clearSwiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                NewsBoxData.deleteAll(NewsBoxData.class);
+                Collection.deleteAll(Collection.class);
+                MainActivity.refreshHistoryList();
+                MainActivity.refreshCollectionList();
+                clearSwiper.setRefreshing(false);
             }
         });
     }

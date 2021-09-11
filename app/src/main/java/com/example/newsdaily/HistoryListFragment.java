@@ -13,12 +13,14 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryListFragment extends Fragment {
     ArrayList<NewsBoxData> historyData;
+    SwipeRefreshLayout clearSwiper;
     public ListView historyList;
 
     @Nullable
@@ -26,6 +28,7 @@ public class HistoryListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_list, container, false);
         historyList = view.findViewById(R.id.history_box_list);
+        clearSwiper = view.findViewById(R.id.clear_swiper);
         return view;
     }
 
@@ -39,6 +42,16 @@ public class HistoryListFragment extends Fragment {
             System.out.println(news.getTitle());
         }
 
+        clearSwiper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                NewsBoxData.deleteAll(NewsBoxData.class);
+                Collection.deleteAll(Collection.class);
+                MainActivity.refreshHistoryList();
+                MainActivity.refreshCollectionList();
+                clearSwiper.setRefreshing(false);
+            }
+        });
         historyList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

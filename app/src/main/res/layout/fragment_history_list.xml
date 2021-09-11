@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent">
-    <TextView android:layout_width="match_parent" android:layout_height="50dp"
+    <TextView android:id="@+id/title_text"
+              android:layout_width="match_parent" android:layout_height="50dp"
               android:text="历史记录"
               android:layout_centerHorizontal="true"
               android:textAlignment="center"
@@ -11,6 +12,25 @@
               android:gravity="center"
               android:background="#9A6492F1"/>
 
-    <ListView android:layout_width="match_parent" android:layout_height="match_parent"
-              android:layout_marginTop="50dp" android:id="@+id/history_box_list"/>
+    <TextView android:layout_width="match_parent" android:layout_height="20dp"
+              android:hint="下拉清除所有记录(包括收藏夹)"
+              android:layout_centerHorizontal="true"
+              android:textAlignment="center"
+              android:textStyle="normal"
+              android:textSize="16dp"
+              android:gravity="center"
+              android:background="#6B769DED"
+              android:layout_below="@+id/title_text"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/clear_swiper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp">
+
+        <ListView android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:id="@+id/history_box_list"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

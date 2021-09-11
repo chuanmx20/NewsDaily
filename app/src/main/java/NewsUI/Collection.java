@@ -10,7 +10,7 @@ public class Collection extends SugarRecord {
     }
     public static boolean inCollection(String url) {
         for (Collection collection : Collection.listAll(Collection.class)) {
-            if (collection.equals(url))
+            if (collection.detailUrl.equals(url))
                 return true;
         }
         return false;
