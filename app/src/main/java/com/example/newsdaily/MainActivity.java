@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     public static void refreshHistoryList() {
         ((HistoryListFragment) fragments.get(1)).refreshList();
     }
+    public static void refreshCollectionList() {
+        ((CollectionListFragment) fragments.get(2)).refreshList();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragments.add(new MainFragment());
         fragments.add(new HistoryListFragment());
+        fragments.add(new CollectionListFragment());
 
         ViewPager contentViewPager = findViewById(R.id.content_view_pager);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
@@ -56,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_main:
                         contentViewPager.setCurrentItem(0);
                         break;
-                    case R.id.nav_setup:
+                    case R.id.nav_history:
                         contentViewPager.setCurrentItem(1);
+                        break;
+                    case R.id.nav_collection:
+                        contentViewPager.setCurrentItem(2);
                         break;
                 }
                 return false;
@@ -91,6 +98,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ((MainFragment) fragments.get(0)).onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 2) {
+            String url = data.getStringExtra("url");
+            boolean col = data.getBooleanExtra("collect", false);
+
+            Collection.cleanCollect(url);
+            if (col) {
+                new Collection(url).save();
+            }
+
+            refreshCollectionList();
+        }
     }
 
     private class PageAdapter extends FragmentPagerAdapter {

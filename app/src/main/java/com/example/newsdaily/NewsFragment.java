@@ -120,7 +120,8 @@ public class NewsFragment extends Fragment {
                 //页面跳转
                 Intent intent = new Intent(getContext(), DetailActivity.class);
                 intent.putExtra("url", newsBoxDataArray.get(position).getDetailUrl());
-                startActivity(intent);
+                intent.putExtra("collect", Collection.inCollection(newsBoxDataArray.get(position).getDetailUrl()));
+                startActivityForResult(intent, 2);
                 //if not visited
                 if (!NewsBoxData.isVisited(newsBoxDataArray.get(position))) {
                     newsBoxDataArray.get(position).save();
